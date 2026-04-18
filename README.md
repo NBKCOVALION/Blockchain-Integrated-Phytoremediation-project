@@ -2,558 +2,299 @@
 Dashboard for Mining Phytoremediation 
 [urua_web3_monitoring_dashboard FULL SELF-CONTAINED.html]
 (https://github.com/user-attachments/files/26856514/urua_web3_monitoring_dashboard.FULL.SELF-CONTAINED.html)
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>URUA Exposure — Web3 Platform Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --g1:#0B3D2E;--g2:#1A5C40;--g3:#7ED957;--g4:#E8F5E9;
-  --dark:#0A0F0D;--surface:#111A14;--card:#161F18;--card2:#1C2820;
-  --border:#2A3D2E;--border2:#1E2E22;
-  --txt:#E8F2E9;--muted:#8AA890;--hint:#4A6650;
-  --accent:#7ED957;--accent2:#4CAF50;--accent3:#A8E063;
-  --amber:#EF9F27;--blue:#378ADD;--red:#E24B4A;
-  --success:#1D9E75;--warn:#BA7517;
-  --font:'Space Grotesk',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-}
-html,body{min-height:100vh;background:var(--dark);color:var(--txt);font-family:var(--font);font-size:14px;line-height:1.5}
-/* scrollbar */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--dark)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-.wrap{display:flex;flex-direction:column;gap:14px;padding:16px;max-width:1400px;margin:0 auto}
-
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
-.topbar-left{display:flex;align-items:center;gap:12px}
-.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--g1),var(--g2));display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
-.logo span{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:-0.5px}
-.brand-name{font-size:15px;font-weight:600;color:var(--txt);letter-spacing:-0.3px}
-.brand-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.chain-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);font-size:11px;color:var(--accent2);font-weight:500}
-.chain-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.wallet-pill{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--card);border:1px solid var(--border);font-size:11px;color:var(--muted);font-family:var(--mono);cursor:pointer;transition:border-color 0.15s}
-.wallet-pill:hover{border-color:var(--accent)}
-.live-badge{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
-.live-dot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
-
-/* NAV */
-.nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
-.nav::-webkit-scrollbar{height:0}
-.nav button{padding:7px 16px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;font-family:var(--font)}
-.nav button:hover{color:var(--txt);background:var(--card)}
-.nav button.active{background:rgba(126,217,87,0.12);color:var(--accent);border-color:rgba(126,217,87,0.2)}
-
-/* METRICS */
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.metric{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden;transition:border-color 0.15s}
-.metric:hover{border-color:var(--border)}
-.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
-.metric-label{font-size:10px;color:var(--hint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;font-weight:500}
-.metric-val{font-size:24px;font-weight:600;color:var(--txt);line-height:1;letter-spacing:-0.5px}
-.metric-sub{font-size:10px;color:var(--muted);margin-top:5px}
-.mbadge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:500;margin-top:7px}
-.mbadge.up{background:rgba(29,158,117,0.15);color:var(--success)}
-.mbadge.neutral{background:rgba(55,138,221,0.15);color:var(--blue)}
-.mbadge.warn{background:rgba(186,117,23,0.15);color:var(--amber)}
-.mbadge.down{background:rgba(226,75,74,0.15);color:var(--red)}
-
-/* GRID */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-
-/* CARD */
-.card{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:16px}
-.card:hover{border-color:var(--border)}
-.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.card-title{font-size:13px;font-weight:600;color:var(--txt);letter-spacing:-0.2px}
-.card-sub{font-size:10px;color:var(--hint);text-transform:uppercase;letter-spacing:0.05em}
-.tag{display:inline-flex;align-items:center;font-size:10px;padding:3px 9px;border-radius:6px;font-weight:500}
-.tag-green{background:rgba(29,158,117,0.15);color:var(--success)}
-.tag-amber{background:rgba(186,117,23,0.15);color:var(--amber)}
-.tag-blue{background:rgba(55,138,221,0.15);color:var(--blue)}
-.tag-red{background:rgba(226,75,74,0.15);color:var(--red)}
-
-/* SITE ROWS */
-.site-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2)}
-.site-row:last-child{border-bottom:none}
-.site-icon{width:34px;height:34px;border-radius:8px;background:rgba(126,217,87,0.08);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.site-info{flex:1;min-width:0}
-.site-name{font-size:12px;font-weight:500;color:var(--txt)}
-.site-loc{font-size:10px;color:var(--muted);margin-top:1px}
-.site-bar-wrap{width:100%;height:3px;background:var(--border2);border-radius:2px;margin-top:6px}
-.site-bar-fill{height:3px;border-radius:2px;transition:width 0.5s}
-.pct{font-size:11px;font-weight:500;min-width:30px;text-align:right}
-
-/* FEED */
-.feed-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
-.feed-row:last-child{border-bottom:none}
-.feed-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.feed-text{flex:1;font-size:11px;color:var(--muted);line-height:1.5}
-.feed-time{font-size:10px;color:var(--hint);flex-shrink:0;font-family:var(--mono)}
-
-/* BARS */
-.bar-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2)}
-.bar-row:last-child{border-bottom:none}
-.bar-label{font-size:11px;color:var(--muted);width:94px;flex-shrink:0}
-.bar-track{flex:1;height:5px;background:var(--border2);border-radius:3px;overflow:hidden}
-.bar-fill{height:5px;background:var(--accent2);border-radius:3px;transition:width 0.6s}
-.bar-amt{font-size:11px;color:var(--txt);font-weight:500;width:64px;text-align:right;font-family:var(--mono)}
-
-/* TOKEN */
-.token-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border2)}
-.token-row:last-child{border-bottom:none}
-.token-left{display:flex;align-items:center;gap:9px}
-.t-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;border:1px solid var(--border)}
-.t-name{font-size:12px;font-weight:500;color:var(--txt)}
-.t-addr{font-size:10px;color:var(--hint);font-family:var(--mono);margin-top:1px}
-.t-val{font-size:12px;font-weight:500;color:var(--txt);font-family:var(--mono)}
-
-/* NFT */
-.nft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.nft-card{border:1px solid var(--border2);border-radius:10px;overflow:hidden;transition:border-color 0.15s}
-.nft-card:hover{border-color:var(--border)}
-.nft-img{height:60px;display:flex;align-items:center;justify-content:center;background:rgba(126,217,87,0.04)}
-.nft-body{padding:8px 10px}
-.nft-name{font-size:11px;font-weight:500;color:var(--txt)}
-.nft-id{font-size:9px;color:var(--hint);font-family:var(--mono);margin-top:2px}
-
-/* DAO */
-.dao-prop{padding:12px;border:1px solid var(--border2);border-radius:10px;margin-bottom:8px;transition:border-color 0.15s}
-.dao-prop:last-child{margin-bottom:0}
-.dao-prop:hover{border-color:var(--border)}
-.dao-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-.dao-title{font-size:12px;font-weight:500;color:var(--txt);line-height:1.4}
-.vote-bars{display:flex;height:5px;border-radius:3px;overflow:hidden;margin-bottom:7px;gap:2px}
-.vote-yes{background:var(--success)}
-.vote-no{background:var(--red)}
-.vote-abs{background:var(--hint)}
-.vote-stats{display:flex;gap:14px}
-.vs{font-size:10px;color:var(--hint)}
-.vs span{color:var(--muted);font-weight:500}
-
-/* ENV */
-.env-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.env-card{padding:10px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:8px}
-.env-param{font-size:10px;color:var(--hint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
-.env-val{font-size:17px;font-weight:600;color:var(--txt);letter-spacing:-0.3px;font-family:var(--mono)}
-.env-trend{font-size:10px;margin-top:3px;font-weight:500}
-
-/* SC */
-.sc-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2)}
-.sc-row:last-child{border-bottom:none}
-.sc-icon{width:30px;height:30px;border-radius:50%;background:rgba(55,138,221,0.1);border:1px solid rgba(55,138,221,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sc-info{flex:1;min-width:0}
-.sc-name{font-size:12px;font-weight:500;color:var(--txt)}
-.sc-detail{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
-.sc-hash{font-size:9px;color:var(--hint);font-family:var(--mono);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* COMMUNITY */
-.stat3{display:flex;gap:16px}
-.stat3-item{flex:1}
-.stat3-label{font-size:10px;color:var(--hint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
-.stat3-val{font-size:20px;font-weight:600;color:var(--txt);letter-spacing:-0.4px}
-.stat3-sub{font-size:10px;color:var(--muted);margin-top:2px}
-
-/* DATA INTEGRITY */
-.integrity-row{display:flex;gap:16px;flex-wrap:wrap}
-.int-item{flex:1;min-width:140px}
-.int-label{font-size:10px;color:var(--hint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
-.int-val{font-size:18px;font-weight:600;color:var(--txt);font-family:var(--mono)}
-.int-sub{font-size:10px;color:var(--hint);margin-top:2px}
-
-/* ACTION CARD */
-.action-card{padding:14px;border:1px solid var(--border2);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:var(--surface);transition:all 0.15s}
-.action-card:hover{border-color:rgba(126,217,87,0.3);background:rgba(126,217,87,0.04)}
-
-/* TABS */
-.tab-content{display:none;flex-direction:column;gap:12px}
-.tab-content.active{display:flex}
-
-/* DIVIDER */
-.divider{font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:0.08em;padding:4px 0 2px}
-</style>
-</head>
-<body>
-<div class="wrap">
-
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar-left">
-    <div class="logo"><span>UE</span></div>
-    <div>
-      <div class="brand-name">URUA Exposure</div>
-      <div class="brand-sub">Phytoremediation Intelligence Network · NW Province</div>
-    </div>
-  </div>
-  <div class="topbar-right">
-    <div class="live-badge"><div class="live-dot"></div>Live</div>
-    <div class="chain-pill"><div class="chain-dot"></div>Polygon Mainnet</div>
-    <div class="wallet-pill">0x3f4a...d82c</div>
-  </div>
+<!-- URUA EXPOSURE — GITHUB README -->
+<div align="center">
+```
+██╗   ██╗██████╗ ██╗   ██╗ █████╗
+██║   ██║██╔══██╗██║   ██║██╔══██╗
+██║   ██║██████╔╝██║   ██║███████║
+██║   ██║██╔══██╗██║   ██║██╔══██║
+╚██████╔╝██║  ██║╚██████╔╝██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+```
+URUA EXPOSURE (PTY) LTD
+Phytoremediation Intelligence Network · North West Province, South Africa
+---
+![Network](https://img.shields.io/badge/Polygon-Mainnet-8247E5?style=flat-square&logo=polygon&logoColor=white)
+![Standard](https://img.shields.io/badge/Solidity-0.8.20-363636?style=flat-square&logo=solidity&logoColor=white)
+![Framework](https://img.shields.io/badge/Next.js-14-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![App](https://img.shields.io/badge/Expo-50-000020?style=flat-square&logo=expo&logoColor=white)
+![License](https://img.shields.io/badge/License-Proprietary-0B3D2E?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Pre--Pilot-7ED957?style=flat-square)
+<br/>
+> *Converting contaminated post-mining land into verified, community-owned ecological assets —*
+> *on-chain, tamper-proof, and permanently auditable.*
+<br/>
+Live Dashboard · NCIC Application · Web3 Build Spec · Brand Book
 </div>
+---
+What This Is
+URUA Exposure is a biological infrastructure company deploying phytoremediation systems across the North West Province mining corridor — converting platinum belt tailings dams, acid mine drainage zones, and degraded municipal land into measurable, compliance-aligned ecological assets.
+This repository contains the Web3 platform that powers the operation:
+On-chain environmental data — every soil and water reading hashed to Polygon Mainnet
+Smart contract milestones — automated payment release when real sensor data crosses verified thresholds
+Land Remediation NFTs — tamper-proof ERC-721 certificates for each rehabilitated parcel
+Carbon Credit Tokens — Verra VCS-verified ERC-1155 credits sold to corporate ESG buyers
+ICBRC Community Token — ERC-20 incentive currency rewarding 127 cooperative field workers
+DAO Governance — ICBRC-weighted on-chain voting controlling site expansion and fund allocation
+---
+The Problem We Are Solving
+The North West Province holds the world's largest platinum reserves. It also holds one of the world's largest concentrations of contaminated post-mining land — tailings dams leaching lead, chromium, and acid mine drainage into community water tables across Rustenburg, Klerksdorp, Brits, Lichtenburg, and Mahikeng.
+Traditional mechanical remediation costs R1M–R5M per hectare. It generates no economic activity. It produces compliance paperwork that cannot be independently verified.
+We do it differently.
+```
+Traditional Remediation          URUA Exposure
+─────────────────────            ─────────────────────────────────────
+R1M–5M / hectare          →      R250K–750K / hectare
+No community employment   →      127 cooperative operators earning ICBRC
+Paper compliance records  →      On-chain tamper-proof data, hashed every 6h
+Single outcome: cleanup   →      Food production + water treatment + carbon credits
+Client must trust reports →      Chainlink oracle-verified, publicly auditable
+```
+---
+Active Sites — North West Province
+Site	Location	Hectares	Contamination	Progress	Status
+Rustenburg Platinum Belt	Bapo ba Mogale land	3.2 ha	PGM tailings — Pb, Cr, Ni	78%	🟢 Active
+Klerksdorp Gold Corridor	AMD zone	2.8 ha	Au tailings — AMD, As	54%	🟡 Phase 2
+Brits Chrome Zone	Bakgatla land	2.1 ha	Cr/V processing waste	41%	🟡 Phase 2
+Lichtenburg Alluvial	Diamond disturbance	2.4 ha	Topsoil loss, heavy metals	66%	🟢 Active
+Mahikeng Peri-Urban	Municipal degraded land	1.9 ha	Industrial discharge	33%	🟡 Phase 1
+---
+Platform Architecture
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     URUA EXPOSURE PLATFORM                      │
+├────────────────┬────────────────┬───────────────┬───────────────┤
+│   FIELD LAYER  │   DATA LAYER   │  CHAIN LAYER  │  APP LAYER   │
+│                │                │               │              │
+│  IoT Sensors   │  Fastify API   │  Polygon PoS  │  Next.js 14  │
+│  Soil Probes   │  PostgreSQL    │  Chainlink    │  Dashboard   │
+│  Water Meters  │  Redis Cache   │  The Graph    │              │
+│  Drone NDVI    │  BullMQ Jobs   │  IPFS/Pinata  │  Expo RN     │
+│  Field App     │  Supabase RT   │  Safe Multisig│  Mobile App  │
+└────────────────┴────────────────┴───────────────┴───────────────┘
+```
+Smart Contract System
+Contract	Standard	Purpose
+`ICBRCToken.sol`	ERC-20 + ERC20Votes	Community incentive token — 100M supply — DAO voting weight
+`RemediationMilestone.sol`	Custom	Client escrow — auto-payment on oracle-verified environmental data
+`LandRemediationNFT.sol`	ERC-721	Certificate per remediated parcel — updated monthly with new readings
+`CarbonCreditToken.sol`	ERC-1155	Verra VCS-verified tCO₂ tokens — batch mintable — fractional sale
+`RewardDistributor.sol`	Custom	Monthly ICBRC epoch rewards to 127 cooperative operators
+`StakingVault.sol`	Custom	Operator stake + slash — accountability mechanism
+`TokenVesting.sol`	Custom	Team + partner token vesting — cliff + linear release
+`URUAGovernor.sol`	OZ Governor	Full DAO — 10 proposal types — 5–25% quorum thresholds
+---
+ICBRC Token — Economic Model
+```
+Total Supply: 100,000,000 ICBRC (fixed — no further minting)
 
-<!-- NAV -->
-<div class="nav" id="nav">
-  <button class="active" onclick="switchTab('overview',this)">Overview</button>
-  <button onclick="switchTab('environment',this)">Environmental Data</button>
-  <button onclick="switchTab('blockchain',this)">Blockchain</button>
-  <button onclick="switchTab('nft',this)">NFT Certificates</button>
-  <button onclick="switchTab('carbon',this)">Carbon Credits</button>
-  <button onclick="switchTab('dao',this)">DAO Governance</button>
-  <button onclick="switchTab('contracts',this)">Smart Contracts</button>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Community Rewards Pool    ████████████████████░░░░  45%  (375K/month × 10yr)
+ DAO Treasury              ████████░░░░░░░░░░░░░░░░  20%  (governance-locked)
+ Founding Team             ██████░░░░░░░░░░░░░░░░░░  15%  (12mo cliff, 36mo vest)
+ Ecosystem Partners        ████░░░░░░░░░░░░░░░░░░░░  10%  (6mo cliff, 24mo vest)
+ Reserve / Emergency       ███░░░░░░░░░░░░░░░░░░░░░   7%  (7-of-10 multisig)
+ Initial Liquidity         █░░░░░░░░░░░░░░░░░░░░░░░   3%  (18mo LP lock)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+Monthly reward rates (configurable by DAO vote):
+Role	ICBRC / Month	Qualification
+Site Operator	800	4+ weekly field reports with GPS verification
+Drone / NDVI Operator	700	2+ NDVI surveys per site per month
+Environmental Monitor	600	Monthly soil + water lab results submitted
+Training Facilitator	650	Train 2+ new operators to competency
+Safety Officer	550	Weekly inspection reports, zero incidents
+Nursery Operator	500	500+ seedlings logged with quality photos
+Community Liaison	450	4+ documented community engagement sessions
+Data Entry Technician	400	90%+ sensor log completion rate
+---
+DAO Governance
+All platform decisions above R50,000 require an on-chain DAO vote.
+```
+PROPOSAL LIFECYCLE
+
+ DRAFT → SUBMITTED → PENDING (1d) → ACTIVE (7d) → SUCCEEDED → QUEUED (48h) → EXECUTED
+                                  ↘ DEFEATED
+                                  ↘ CANCELLED (Guardian veto — malicious payload only)
+```
+Proposal Type	Quorum	Action
+SITE_EXPANSION	8%	`RemediationMilestone.createSite()`
+FUND_ALLOCATION	6%	Treasury release via Safe multisig
+REWARD_ADJUSTMENT	10%	`RewardDistributor.setRewardRate()`
+CARBON_REVENUE_SPLIT	10%	`CarbonCreditToken.setRevenueSplit()`
+EMERGENCY_PAUSE	3%	`Pausable.pause()` on target contract
+PROTOCOL_UPGRADE	20%	`UUPSUpgradeable.upgradeToAndCall()`
+TRANSFER_ENABLE	25%	`ICBRCToken.enableTransfers()` — irreversible
+---
+Environmental Data Pipeline
+```
+IoT Sensor (site)
+      │  MQTT every 6h
+      ▼
+URUA API Gateway ──► Validate ──► Reject + Alert (outliers)
+      │
+      ▼
+PostgreSQL (soil_readings, water_readings, plant_observations)
+      │
+      ▼
+BullMQ: chain-hash job ──► keccak256 ──► Polygon tx (batch 6h)
+      │
+      ▼
+Monthly aggregate calculated ──► Milestone threshold check
+      │                                     │
+      │                          Threshold crossed
+      │                                     │
+      │                          Chainlink Any API job
+      │                                     │
+      │                          RemediationMilestone.triggerMilestone()
+      │                                     │
+      ▼                          Payment released to client escrow
+The Graph indexes event
+      │
+      ▼
+Dashboard WebSocket push ──► All connected clients update in real-time
+```
+Data integrity stats:
+`14,872` total sensor readings committed on-chain
+`100%` data integrity — zero tampered records
+`48` compliance reports generated (MPRDA + GRI aligned)
+`0` oracle disputes since deployment
+---
+Mobile Field App
+React Native (Expo 50) — offline-first — built for 2G and no-signal conditions in remote North West mine sites.
+```
+KEY FEATURE: OFFLINE MODE
+
+1hr no internet → All 3 reading types saved locally (WatermelonDB/SQLite)
+Reconnect       → Sync queue processes FIFO → All readings committed
+Result          → Zero data loss. Zero failed submissions.
+```
+Offline-capable screens:
+Soil reading submission (Pb, Cr, Cd, pH, conductivity + GPS + photo)
+Water quality form (inflow/outflow pH, DO, turbidity, flow rate)
+Plant observation (zone, species, health score, NDVI estimate, photo)
+Safety incident report (priority queue — bypasses FIFO on reconnect)
+Requires internet (once): Wallet connect · Monthly report IPFS upload · DAO voting
+---
+Tech Stack
+Blockchain
+Network: Polygon Mainnet (PoS, chainId: 137)
+Contracts: Solidity ^0.8.20 + OpenZeppelin 5.x
+Framework: Hardhat + hardhat-deploy
+Oracle: Chainlink Any API
+Storage: IPFS via Pinata
+Indexing: The Graph Protocol
+Multisig: Safe (Gnosis Safe) 3-of-5
+Backend
+Runtime: Node.js 20 LTS + TypeScript
+API: Fastify 4
+Database: PostgreSQL 16 (Supabase)
+Cache: Redis (Upstash)
+Queue: BullMQ
+Auth: NextAuth.js v5 + SIWE
+Frontend
+Framework: Next.js 14 (App Router)
+Styling: Tailwind CSS + shadcn/ui
+Web3: wagmi v2 + viem + ConnectKit
+Charts: Recharts
+Maps: Mapbox GL JS
+Mobile
+Framework: React Native 0.73 + Expo SDK 50
+Offline: WatermelonDB (SQLite)
+Wallet: WalletConnect v2
+Push: Expo Notifications (FCM + APNs)
+---
+Repository Structure
+```
+urua-dashboard/
+├── contracts/                  # Solidity smart contracts
+│   ├── ICBRCToken.sol
+│   ├── RemediationMilestone.sol
+│   ├── LandRemediationNFT.sol
+│   ├── CarbonCreditToken.sol
+│   ├── RewardDistributor.sol
+│   ├── StakingVault.sol
+│   ├── TokenVesting.sol
+│   └── URUAGovernor.sol
+├── test/                       # Hardhat test suite (>95% coverage)
+├── scripts/                    # Deployment scripts
+├── deployments/                # Contract addresses per network
+│   ├── mumbai.json
+│   └── polygon.json
+├── subgraph/                   # The Graph subgraph
+│   ├── schema.graphql
+│   └── subgraph.yaml
+├── apps/
+│   ├── web/                    # Next.js 14 dashboard
+│   └── mobile/                 # Expo React Native app
+├── packages/
+│   ├── api/                    # Fastify backend
+│   ├── db/                     # Prisma schema + migrations
+│   └── shared/                 # Shared TypeScript types
+├── docs/                       # Technical documentation
+│   ├── NCIC_Application.pdf
+│   ├── Web3_Build_Prompt_V2.pdf
+│   └── Brand_Book.pdf
+├── index.html                  # Live dashboard (GitHub Pages)
+└── README.md
+```
+---
+Security
+Audit: Third-party audit (Certik / Hacken) required before Mainnet deployment
+Static analysis: Slither + Mythril — zero HIGH/MEDIUM findings before deploy
+Fuzzing: Echidna on `RemediationMilestone` and `StakingVault` — 1M+ runs
+Upgradeability: UUPS proxy pattern — upgrades require DAO PROTOCOL_UPGRADE proposal + 48h timelock
+Admin: Zero EOA admin power post-deployment — all ownership in Safe 3-of-5 multisig
+Bug bounty: Immunefi — minimum R50,000 ZAR pool — live before Mainnet
+---
+Compliance Alignment
+Framework	Coverage
+MPRDA (Mine closure plans)	Monthly performance reports serve as documented rehabilitation evidence
+NEMA (Environmental authorisation)	Pilot classified as rehabilitation support intervention — below EIA threshold
+National Water Act	Water Use License registration for all constructed wetland cells
+NEM:WA (Waste management)	Pre-identified licensed disposal for hyperaccumulator biomass
+GRI Standards	All sensor data structured for direct GRI reporting
+TCFD	Environmental data feeds directly into climate disclosure frameworks
+Verra VCS	Carbon credit verification and issuance pipeline
+JSE Sustainability Disclosure	Output format matches listed mining company ESG requirements
+---
+Community Impact
+```
+127   cooperative operators across 5 sites
+ 58%  women operators
+ 71%  youth (under 35)
+284K  ICBRC tokens distributed this quarter
+R1.2M ZAR disbursed to community members
+  5   active cooperatives (Rustenburg, Klerksdorp, Brits, Lichtenburg, Mahikeng)
+  3   traditional authority partnerships (Bapo ba Mogale, Bakgatla ba Kgafela, Barolong)
+```
+---
+Live Platform
+Resource	Link
+Live Dashboard	urua-dashboard
+Contract Explorer	Polygonscan — addresses in `deployments/polygon.json`
+Subgraph	The Graph — query all on-chain events
+IPFS Documents	Pinata Gateway — all compliance docs
+Certificate Verify	`/verify/[hash]` — public, no auth required
+---
+Contact and Partnerships
+URUA Exposure is actively seeking partnerships with:
+Mining companies — rehabilitation obligation co-funding (Anglo American Platinum, Sibanye-Stillwater, Impala, Merafe Resources)
+Government — DFFE, DMRE, North West DAECRD
+Development finance — IDC Green Economy window, DBSA Environmental Infrastructure, Green Fund
+Scientific partners — CSIR, North-West University, Mintek
+Carbon credit buyers — Corporate ESG offset purchasers — contact for priority window access
+---
+<div align="center">
+---
+URUA EXPOSURE (PTY) LTD
+Registered in North West Province, South Africa
+Built on Polygon. Verified by Chainlink. Governed by community.
+---
+![Polygon](https://img.shields.io/badge/Built_on-Polygon-8247E5?style=flat-square&logo=polygon&logoColor=white)
+![OpenZeppelin](https://img.shields.io/badge/Secured_by-OpenZeppelin-4E5EE4?style=flat-square)
+![Chainlink](https://img.shields.io/badge/Oracle-Chainlink-375BD2?style=flat-square&logo=chainlink&logoColor=white)
+![Verra](https://img.shields.io/badge/Carbon-Verra_VCS-2E7D32?style=flat-square)
 </div>
-
-<!-- ═══════════════ OVERVIEW ═══════════════ -->
-<div id="tab-overview" class="tab-content active">
-
-  <div class="metrics">
-    <div class="metric">
-      <div class="metric-label">Active sites</div>
-      <div class="metric-val">5</div>
-      <div class="metric-sub">NW Province</div>
-      <div class="mbadge up">+2 this quarter</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Ha remediated</div>
-      <div class="metric-val">12.4</div>
-      <div class="metric-sub">of 50 ha target</div>
-      <div class="mbadge neutral">24.8%</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">ICBRC tokens issued</div>
-      <div class="metric-val">284K</div>
-      <div class="metric-sub">community rewards</div>
-      <div class="mbadge up">+18K this month</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Carbon credits (tCO₂)</div>
-      <div class="metric-val">1,240</div>
-      <div class="metric-sub">verified on-chain</div>
-      <div class="mbadge up">+180 pending</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">NFT certificates</div>
-      <div class="metric-val">38</div>
-      <div class="metric-sub">land parcel tokens</div>
-      <div class="mbadge neutral">3 minting</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Avg metal reduction</div>
-      <div class="metric-val">62%</div>
-      <div class="metric-sub">across all sites</div>
-      <div class="mbadge up">+7% vs last cycle</div>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <div class="card-hd">
-        <span class="card-title">Active remediation sites</span>
-        <span class="tag tag-green">All operational</span>
-      </div>
-      <div class="site-row">
-        <div class="site-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#7ED957" stroke-width="1.2"/><path d="M6 8.5l1.5 1.5L11 6" stroke="#7ED957" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-        <div class="site-info">
-          <div class="site-name">Rustenburg Platinum Belt</div>
-          <div class="site-loc">3.2 ha · PGM tailings · Bapo ba Mogale</div>
-          <div class="site-bar-wrap"><div class="site-bar-fill" style="width:78%;background:#7ED957"></div></div>
-        </div>
-        <span class="pct" style="color:#7ED957">78%</span>
-      </div>
-      <div class="site-row">
-        <div class="site-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#EF9F27" stroke-width="1.2"/><path d="M8 5.5v3.5" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.6" fill="#EF9F27"/></svg></div>
-        <div class="site-info">
-          <div class="site-name">Klerksdorp Gold Corridor</div>
-          <div class="site-loc">2.8 ha · Au tailings · AMD zone</div>
-          <div class="site-bar-wrap"><div class="site-bar-fill" style="width:54%;background:#EF9F27"></div></div>
-        </div>
-        <span class="pct" style="color:#EF9F27">54%</span>
-      </div>
-      <div class="site-row">
-        <div class="site-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#EF9F27" stroke-width="1.2"/><path d="M8 5.5v3.5" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.6" fill="#EF9F27"/></svg></div>
-        <div class="site-info">
-          <div class="site-name">Brits Chrome Zone</div>
-          <div class="site-loc">2.1 ha · Cr/V · Bakgatla land</div>
-          <div class="site-bar-wrap"><div class="site-bar-fill" style="width:41%;background:#EF9F27"></div></div>
-        </div>
-        <span class="pct" style="color:#EF9F27">41%</span>
-      </div>
-      <div class="site-row">
-        <div class="site-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#7ED957" stroke-width="1.2"/><path d="M6 8.5l1.5 1.5L11 6" stroke="#7ED957" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-        <div class="site-info">
-          <div class="site-name">Lichtenburg Alluvial Zone</div>
-          <div class="site-loc">2.4 ha · Diamond disturbance</div>
-          <div class="site-bar-wrap"><div class="site-bar-fill" style="width:66%;background:#7ED957"></div></div>
-        </div>
-        <span class="pct" style="color:#7ED957">66%</span>
-      </div>
-      <div class="site-row">
-        <div class="site-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#EF9F27" stroke-width="1.2"/><path d="M8 5.5v3.5" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.6" fill="#EF9F27"/></svg></div>
-        <div class="site-info">
-          <div class="site-name">Mahikeng Peri-Urban</div>
-          <div class="site-loc">1.9 ha · Municipal degraded land</div>
-          <div class="site-bar-wrap"><div class="site-bar-fill" style="width:33%;background:#EF9F27"></div></div>
-        </div>
-        <span class="pct" style="color:#EF9F27">33%</span>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card">
-        <div class="card-hd">
-          <span class="card-title">Live activity feed</span>
-          <span class="card-sub">On-chain + field</span>
-        </div>
-        <div class="feed-row"><div class="feed-dot" style="background:#1D9E75"></div><div class="feed-text">NFT #RB-034 minted — Rustenburg parcel remediation milestone verified on-chain</div><div class="feed-time">2m</div></div>
-        <div class="feed-row"><div class="feed-dot" style="background:#378ADD"></div><div class="feed-text">Smart contract SC-009 triggered — Phase 2 milestone payment released R 180,000</div><div class="feed-time">14m</div></div>
-        <div class="feed-row"><div class="feed-dot" style="background:#EF9F27"></div><div class="feed-text">Soil sensor alert: Pb at KL-Site-B above threshold — field team notified</div><div class="feed-time">38m</div></div>
-        <div class="feed-row"><div class="feed-dot" style="background:#1D9E75"></div><div class="feed-text">DAO Proposal #12 passed — 847 votes cast, new Brits site approved</div><div class="feed-time">2h</div></div>
-        <div class="feed-row"><div class="feed-dot" style="background:#1D9E75"></div><div class="feed-text">180 tCO₂ carbon credits submitted for Verra VCS verification</div><div class="feed-time">4h</div></div>
-        <div class="feed-row"><div class="feed-dot" style="background:#378ADD"></div><div class="feed-text">ICBRC tokens distributed — 3,200 tokens to Rustenburg cooperative members</div><div class="feed-time">6h</div></div>
-      </div>
-      <div class="card">
-        <div class="card-hd"><span class="card-title">Community enterprise</span><span class="tag tag-green">5 cooperatives active</span></div>
-        <div class="stat3">
-          <div class="stat3-item"><div class="stat3-label">Total operators</div><div class="stat3-val">127</div><div class="stat3-sub">58% women · 71% youth</div></div>
-          <div class="stat3-item"><div class="stat3-label">ICBRC earned</div><div class="stat3-val">284K</div><div class="stat3-sub">avg 2,237 per operator</div></div>
-          <div class="stat3-item"><div class="stat3-label">ZAR disbursed</div><div class="stat3-val">R1.2M</div><div class="stat3-sub">this quarter</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ ENVIRONMENT ═══════════════ -->
-<div id="tab-environment" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Pb — Lead (avg mg/kg)</div><div class="metric-val">142</div><div class="metric-sub">baseline: 387</div><div class="mbadge up">-63% reduction</div></div>
-    <div class="metric"><div class="metric-label">Cr — Chromium (mg/kg)</div><div class="metric-val">89</div><div class="metric-sub">baseline: 241</div><div class="mbadge up">-63% reduction</div></div>
-    <div class="metric"><div class="metric-label">Cd — Cadmium (mg/kg)</div><div class="metric-val">3.1</div><div class="metric-sub">baseline: 8.7</div><div class="mbadge up">-64% reduction</div></div>
-    <div class="metric"><div class="metric-label">Water pH (avg)</div><div class="metric-val">6.8</div><div class="metric-sub">baseline: 3.2 (AMD)</div><div class="mbadge up">Neutralised</div></div>
-    <div class="metric"><div class="metric-label">Ground cover (%)</div><div class="metric-val">74%</div><div class="metric-sub">target: 80%</div><div class="mbadge neutral">Month 8</div></div>
-    <div class="metric"><div class="metric-label">Biomass yield (t/ha)</div><div class="metric-val">4.8</div><div class="metric-sub">this harvest cycle</div><div class="mbadge up">+0.9 vs prior</div></div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Contaminant reduction by site</span><span class="card-sub">On-chain verified</span></div>
-      <div class="bar-row"><div class="bar-label">Rustenburg</div><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><div class="bar-amt">78%</div></div>
-      <div class="bar-row"><div class="bar-label">Klerksdorp</div><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><div class="bar-amt">54%</div></div>
-      <div class="bar-row"><div class="bar-label">Brits</div><div class="bar-track"><div class="bar-fill" style="width:41%"></div></div><div class="bar-amt">41%</div></div>
-      <div class="bar-row"><div class="bar-label">Lichtenburg</div><div class="bar-track"><div class="bar-fill" style="width:66%"></div></div><div class="bar-amt">66%</div></div>
-      <div class="bar-row"><div class="bar-label">Mahikeng</div><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div><div class="bar-amt">33%</div></div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Environmental sensor network</span><span class="card-sub">IoT · on-chain hashed</span></div>
-      <div class="env-grid">
-        <div class="env-card"><div class="env-param">Soil moisture</div><div class="env-val">34%</div><div class="env-trend" style="color:#1D9E75">Optimal range</div></div>
-        <div class="env-card"><div class="env-param">AMD inflow pH</div><div class="env-val">3.2</div><div class="env-trend" style="color:#E24B4A">Acidic · wetland active</div></div>
-        <div class="env-card"><div class="env-param">Outflow pH</div><div class="env-val">6.8</div><div class="env-trend" style="color:#1D9E75">Treated · safe</div></div>
-        <div class="env-card"><div class="env-param">NDVI (plant health)</div><div class="env-val">0.71</div><div class="env-trend" style="color:#1D9E75">Healthy biomass</div></div>
-        <div class="env-card"><div class="env-param">Dust (µg/m³)</div><div class="env-val">18</div><div class="env-trend" style="color:#1D9E75">Below WHO limit</div></div>
-        <div class="env-card"><div class="env-param">Groundwater EC</div><div class="env-val">1,240 µS</div><div class="env-trend" style="color:#EF9F27">Monitoring closely</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">On-chain data integrity</span><span class="card-sub">All sensor readings hashed to Polygon · tamper-proof ESG</span></div>
-    <div class="integrity-row">
-      <div class="int-item"><div class="int-label">Last hash committed</div><div class="int-val" style="font-size:13px">0x8f3a...c291</div><div class="int-sub">Block #47,382,910 · 12 min ago</div></div>
-      <div class="int-item"><div class="int-label">Total readings logged</div><div class="int-val">14,872</div><div class="int-sub">across all sites</div></div>
-      <div class="int-item"><div class="int-label">Data integrity</div><div class="int-val" style="color:#1D9E75">100%</div><div class="int-sub">zero tampered records</div></div>
-      <div class="int-item"><div class="int-label">Compliance reports</div><div class="int-val">48</div><div class="int-sub">MPRDA + GRI aligned</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ BLOCKCHAIN ═══════════════ -->
-<div id="tab-blockchain" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Network</div><div class="metric-val" style="font-size:18px">Polygon</div><div class="metric-sub">PoS · low gas</div><div class="mbadge up">Live</div></div>
-    <div class="metric"><div class="metric-label">ICBRC price</div><div class="metric-val">R0.42</div><div class="metric-sub">per token</div><div class="mbadge up">+4.2% 24h</div></div>
-    <div class="metric"><div class="metric-label">Total supply</div><div class="metric-val">10M</div><div class="metric-sub">ICBRC tokens</div><div class="mbadge neutral">2.84% circulating</div></div>
-    <div class="metric"><div class="metric-label">Txns today</div><div class="metric-val">847</div><div class="metric-sub">cross-platform</div><div class="mbadge up">+12%</div></div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Token wallet overview</span><span class="card-sub">URUA treasury · 0x3f4a...d82c</span></div>
-      <div class="token-row">
-        <div class="token-left"><div class="t-icon" style="background:rgba(126,217,87,0.12);color:#7ED957">IC</div><div><div class="t-name">ICBRC Token</div><div class="t-addr">0x7c3b...f21a</div></div></div>
-        <div class="t-val">7,160,000</div>
-      </div>
-      <div class="token-row">
-        <div class="token-left"><div class="t-icon" style="background:rgba(55,138,221,0.12);color:#378ADD">CC</div><div><div class="t-name">Carbon Credit Token</div><div class="t-addr">0x2d8f...a33e</div></div></div>
-        <div class="t-val">1,240 tCO₂</div>
-      </div>
-      <div class="token-row">
-        <div class="token-left"><div class="t-icon" style="background:rgba(186,117,23,0.12);color:#EF9F27">LR</div><div><div class="t-name">Land Remediation NFT</div><div class="t-addr">ERC-721 · 38 minted</div></div></div>
-        <div class="t-val">38 NFTs</div>
-      </div>
-      <div class="token-row">
-        <div class="token-left"><div class="t-icon" style="background:rgba(29,158,117,0.12);color:#1D9E75">M</div><div><div class="t-name">MATIC (gas reserve)</div><div class="t-addr">operational wallet</div></div></div>
-        <div class="t-val">4,280 MATIC</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">ICBRC token distribution</span><span class="card-sub">Community incentive breakdown</span></div>
-      <div class="bar-row"><div class="bar-label">Site operators</div><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><div class="bar-amt">119K</div></div>
-      <div class="bar-row"><div class="bar-label">Data monitors</div><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><div class="bar-amt">51K</div></div>
-      <div class="bar-row"><div class="bar-label">Nursery ops</div><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div><div class="bar-amt">40K</div></div>
-      <div class="bar-row"><div class="bar-label">DAO voters</div><div class="bar-track"><div class="bar-fill" style="width:11%"></div></div><div class="bar-amt">31K</div></div>
-      <div class="bar-row"><div class="bar-label">Training bonus</div><div class="bar-track"><div class="bar-fill" style="width:9%"></div></div><div class="bar-amt">26K</div></div>
-      <div class="bar-row"><div class="bar-label">Referral / other</div><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div><div class="bar-amt">17K</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ NFT ═══════════════ -->
-<div id="tab-nft" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Total NFTs minted</div><div class="metric-val">38</div><div class="metric-sub">land parcels</div><div class="mbadge up">+3 this month</div></div>
-    <div class="metric"><div class="metric-label">Ha certified</div><div class="metric-val">12.4</div><div class="metric-sub">on-chain title</div><div class="mbadge neutral">ERC-721</div></div>
-    <div class="metric"><div class="metric-label">Compliance NFTs</div><div class="metric-val">14</div><div class="metric-sub">MPRDA milestone</div><div class="mbadge up">All valid</div></div>
-    <div class="metric"><div class="metric-label">Floor value (ZAR)</div><div class="metric-val">R48K</div><div class="metric-sub">per land NFT</div><div class="mbadge up">+R8K vs mint</div></div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Land remediation certificate NFTs</span><span class="card-sub">Each NFT = verified on-chain rehabilitation record</span></div>
-    <div class="nft-grid">
-      <div class="nft-card"><div class="nft-img"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#7ED957" stroke-width="1.5"/><path d="M9 14l3 3 7-7" stroke="#7ED957" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Rustenburg RB-001</div><div class="nft-id">#0x7f3...a12</div><div class="tag tag-green" style="margin-top:5px;font-size:9px">Verified · 0.8 ha</div></div></div>
-      <div class="nft-card"><div class="nft-img"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#7ED957" stroke-width="1.5"/><path d="M9 14l3 3 7-7" stroke="#7ED957" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Klerksdorp KL-002</div><div class="nft-id">#0x4c1...b87</div><div class="tag tag-green" style="margin-top:5px;font-size:9px">Verified · 1.1 ha</div></div></div>
-      <div class="nft-card"><div class="nft-img" style="background:rgba(186,117,23,0.08)"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#EF9F27" stroke-width="1.5"/><path d="M14 9v6M14 17v2" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Brits BR-007</div><div class="nft-id">#0x9d2...e44</div><div class="tag tag-amber" style="margin-top:5px;font-size:9px">Minting · 0.6 ha</div></div></div>
-      <div class="nft-card"><div class="nft-img"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#7ED957" stroke-width="1.5"/><path d="M9 14l3 3 7-7" stroke="#7ED957" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Lichtenburg LI-012</div><div class="nft-id">#0x2b8...c93</div><div class="tag tag-green" style="margin-top:5px;font-size:9px">Verified · 0.9 ha</div></div></div>
-      <div class="nft-card"><div class="nft-img" style="background:rgba(55,138,221,0.08)"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#378ADD" stroke-width="1.5"/><path d="M10 14h8M14 10v8" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Compliance #MPRDA-14</div><div class="nft-id">#0x6e5...f02</div><div class="tag tag-blue" style="margin-top:5px;font-size:9px">Regulatory · DMRE</div></div></div>
-      <div class="nft-card"><div class="nft-img" style="background:rgba(186,117,23,0.08)"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="20" height="20" rx="3" stroke="#EF9F27" stroke-width="1.5"/><path d="M14 9v6M14 17v2" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="nft-body"><div class="nft-name">Mahikeng MH-003</div><div class="nft-id">#0x1a7...d55</div><div class="tag tag-amber" style="margin-top:5px;font-size:9px">In progress · 0.5 ha</div></div></div>
-    </div>
-    <div style="margin-top:14px;padding:12px;background:var(--surface);border:1px solid var(--border2);border-radius:8px">
-      <div style="font-size:10px;color:var(--hint);line-height:1.7">NFT structure: each token contains — GPS coordinates, baseline contamination data hash, monthly remediation CIDs (IPFS), plant species deployed, cooperative wallet address, MPRDA compliance status, carbon credit linkage. Transferable to mine ESG systems or government registries.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ CARBON ═══════════════ -->
-<div id="tab-carbon" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Credits verified (tCO₂)</div><div class="metric-val">1,240</div><div class="metric-sub">Verra VCS standard</div><div class="mbadge up">On-chain</div></div>
-    <div class="metric"><div class="metric-label">Credits pending</div><div class="metric-val">180</div><div class="metric-sub">submitted for review</div><div class="mbadge neutral">~30 days</div></div>
-    <div class="metric"><div class="metric-label">Avg price (ZAR/tCO₂)</div><div class="metric-val">R420</div><div class="metric-sub">voluntary market</div><div class="mbadge up">+R40 YTD</div></div>
-    <div class="metric"><div class="metric-label">Revenue (ZAR)</div><div class="metric-val">R520K</div><div class="metric-sub">carbon sales to date</div><div class="mbadge up">+R76K this month</div></div>
-  </div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Carbon credit pipeline</span><span class="card-sub">Tokenised · ERC-1155</span></div>
-      <div class="bar-row"><div class="bar-label">Rustenburg</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-amt">360 tCO₂</div></div>
-      <div class="bar-row"><div class="bar-label">Klerksdorp</div><div class="bar-track"><div class="bar-fill" style="width:56%"></div></div><div class="bar-amt">280 tCO₂</div></div>
-      <div class="bar-row"><div class="bar-label">Lichtenburg</div><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><div class="bar-amt">210 tCO₂</div></div>
-      <div class="bar-row"><div class="bar-label">Brits</div><div class="bar-track"><div class="bar-fill" style="width:34%"></div></div><div class="bar-amt">170 tCO₂</div></div>
-      <div class="bar-row"><div class="bar-label">Mahikeng</div><div class="bar-track"><div class="bar-fill" style="width:24%"></div></div><div class="bar-amt">120 tCO₂</div></div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Verification and buyers</span><span class="card-sub">Corporate ESG demand</span></div>
-      <div class="token-row"><div class="token-left"><div class="t-icon" style="background:rgba(29,158,117,0.12);color:#1D9E75;font-size:9px">VCS</div><div><div class="t-name">Verra VCS Standard</div><div class="t-addr">Primary verification body</div></div></div><div class="t-val" style="color:#1D9E75">Active</div></div>
-      <div class="token-row"><div class="token-left"><div class="t-icon" style="background:rgba(55,138,221,0.12);color:#378ADD;font-size:10px">AA</div><div><div class="t-name">Anglo American Platinum</div><div class="t-addr">ESG offset buyer · pipeline</div></div></div><div class="t-val">400 tCO₂</div></div>
-      <div class="token-row"><div class="token-left"><div class="t-icon" style="background:rgba(186,117,23,0.12);color:#EF9F27;font-size:10px">SS</div><div><div class="t-name">Sibanye-Stillwater</div><div class="t-addr">Negotiations in progress</div></div></div><div class="t-val" style="color:#EF9F27">Pending</div></div>
-      <div class="token-row"><div class="token-left"><div class="t-icon" style="background:rgba(29,158,117,0.12);color:#1D9E75;font-size:9px">VM</div><div><div class="t-name">Voluntary Market (XPANSIV)</div><div class="t-addr">Spot sales · open</div></div></div><div class="t-val">840 tCO₂</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ DAO ═══════════════ -->
-<div id="tab-dao" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Total voters</div><div class="metric-val">1,284</div><div class="metric-sub">ICBRC token holders</div><div class="mbadge up">+127 this month</div></div>
-    <div class="metric"><div class="metric-label">Proposals passed</div><div class="metric-val">12</div><div class="metric-sub">of 14 submitted</div><div class="mbadge neutral">86% pass rate</div></div>
-    <div class="metric"><div class="metric-label">Quorum threshold</div><div class="metric-val">30%</div><div class="metric-sub">of circulating tokens</div><div class="mbadge neutral">Current: 38%</div></div>
-    <div class="metric"><div class="metric-label">Treasury (DAO)</div><div class="metric-val">R840K</div><div class="metric-sub">community controlled</div><div class="mbadge up">Multisig 3/5</div></div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Active and recent proposals</span><span class="card-sub">On-chain voting · ICBRC weighted</span></div>
-    <div class="dao-prop">
-      <div class="dao-top"><div class="dao-title">Prop #14 — Approve Mahikeng Phase 2 expansion (2.5 ha)</div><span class="tag tag-amber">Voting open · 3 days left</span></div>
-      <div class="vote-bars"><div class="vote-yes" style="width:61%"></div><div class="vote-abs" style="width:2%"></div><div class="vote-no" style="width:22%"></div><div class="vote-abs" style="width:15%"></div></div>
-      <div class="vote-stats"><div class="vs">Yes <span>61%</span></div><div class="vs">No <span>22%</span></div><div class="vs">Abstain <span>17%</span></div><div class="vs">Voters <span>412</span></div></div>
-    </div>
-    <div class="dao-prop">
-      <div class="dao-top"><div class="dao-title">Prop #13 — Allocate R 120K to Rustenburg nursery cooperative</div><span class="tag tag-amber">Voting open · 5 days left</span></div>
-      <div class="vote-bars"><div class="vote-yes" style="width:74%"></div><div class="vote-abs" style="width:2%"></div><div class="vote-no" style="width:11%"></div><div class="vote-abs" style="width:13%"></div></div>
-      <div class="vote-stats"><div class="vs">Yes <span>74%</span></div><div class="vs">No <span>11%</span></div><div class="vs">Abstain <span>15%</span></div><div class="vs">Voters <span>538</span></div></div>
-    </div>
-    <div class="dao-prop">
-      <div class="dao-top"><div class="dao-title">Prop #12 — Approve new Brits chrome zone site</div><span class="tag tag-green">Passed · executed on-chain</span></div>
-      <div class="vote-bars"><div class="vote-yes" style="width:82%"></div><div class="vote-abs" style="width:2%"></div><div class="vote-no" style="width:8%"></div><div class="vote-abs" style="width:8%"></div></div>
-      <div class="vote-stats"><div class="vs">Yes <span>82%</span></div><div class="vs">No <span>8%</span></div><div class="vs">Abstain <span>10%</span></div><div class="vs">Voters <span>847</span></div></div>
-    </div>
-    <div class="dao-prop">
-      <div class="dao-top"><div class="dao-title">Prop #11 — Update carbon revenue split to community 50%</div><span class="tag tag-green">Passed · active</span></div>
-      <div class="vote-bars"><div class="vote-yes" style="width:88%"></div><div class="vote-abs" style="width:2%"></div><div class="vote-no" style="width:6%"></div><div class="vote-abs" style="width:4%"></div></div>
-      <div class="vote-stats"><div class="vs">Yes <span>88%</span></div><div class="vs">No <span>6%</span></div><div class="vs">Abstain <span>6%</span></div><div class="vs">Voters <span>901</span></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ SMART CONTRACTS ═══════════════ -->
-<div id="tab-contracts" class="tab-content">
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Active contracts</div><div class="metric-val">9</div><div class="metric-sub">smart contracts</div><div class="mbadge up">All verified</div></div>
-    <div class="metric"><div class="metric-label">Milestones triggered</div><div class="metric-val">34</div><div class="metric-sub">auto-executed</div><div class="mbadge up">R2.4M released</div></div>
-    <div class="metric"><div class="metric-label">Pending milestones</div><div class="metric-val">7</div><div class="metric-sub">awaiting data trigger</div><div class="mbadge neutral">R840K locked</div></div>
-    <div class="metric"><div class="metric-label">Dispute rate</div><div class="metric-val">0%</div><div class="metric-sub">fully automated</div><div class="mbadge up">Zero disputes</div></div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Smart contract registry</span><span class="card-sub">Milestone-based · auto-payment on verified environmental data</span></div>
-    <div class="sc-row">
-      <div class="sc-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v4l2.5 1.5" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="7" r="5" stroke="#378ADD" stroke-width="1.2"/></svg></div>
-      <div class="sc-info"><div class="sc-name">SC-001 · Rustenburg Rehabilitation — Anglo American Platinum</div><div class="sc-detail">Phase 3 of 5 active · Next trigger: 70% Pb reduction · R 240K locked</div><div class="sc-hash">0x4f8a2b1c9e3d7f05a6b2c4d8e1f3a7b9c2d4e6f8a1b3c5d7e9f</div></div>
-      <span class="tag tag-blue">Active</span>
-    </div>
-    <div class="sc-row">
-      <div class="sc-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v4l2.5 1.5" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="7" r="5" stroke="#378ADD" stroke-width="1.2"/></svg></div>
-      <div class="sc-info"><div class="sc-name">SC-004 · Klerksdorp AMD Treatment — Sibanye-Stillwater</div><div class="sc-detail">Phase 2 of 4 active · Next trigger: pH 6.5 sustained 30 days · R 180K locked</div><div class="sc-hash">0x9c3d5e2a8f1b4c7d2e5f8a1b4c7d2e5f8a1b4c7d2e5f8a1b4c</div></div>
-      <span class="tag tag-blue">Active</span>
-    </div>
-    <div class="sc-row">
-      <div class="sc-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#1D9E75" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-      <div class="sc-info"><div class="sc-name">SC-009 · Lichtenburg Land Reuse — NW Municipality</div><div class="sc-detail">Phase 2 milestone reached · R 180K released 14 min ago · Phase 3 initialising</div><div class="sc-hash">0x2b7e4f1a8c3d6b9e2f5a8c1d4b7e2f5a8c3d6b9e2f5a8c1d4b</div></div>
-      <span class="tag tag-green">Executed</span>
-    </div>
-    <div class="sc-row">
-      <div class="sc-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v4l2.5 1.5" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="7" r="5" stroke="#378ADD" stroke-width="1.2"/></svg></div>
-      <div class="sc-info"><div class="sc-name">SC-006 · ICBRC Community Rewards — Rustenburg Cooperative</div><div class="sc-detail">Continuous distribution · Auto-distributes on monthly monitoring submission</div><div class="sc-hash">0x6d1f4a9e2b5c8d3f6a1b4e7c2d5f8a3b6c9d2e5f8a3b6c9d2e</div></div>
-      <span class="tag tag-blue">Active</span>
-    </div>
-    <div class="sc-row">
-      <div class="sc-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v4l2.5 1.5" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="7" r="5" stroke="#378ADD" stroke-width="1.2"/></svg></div>
-      <div class="sc-info"><div class="sc-name">SC-007 · Carbon Credit Issuance — Verra VCS Oracle</div><div class="sc-detail">Triggers on Verra API verification · Mints ERC-1155 credit tokens to treasury</div><div class="sc-hash">0x1a4b7c2d5e8f3a6b9c4d7e2f5a8b1c4d7e2f5a8b1c4d7e2f5a</div></div>
-      <span class="tag tag-blue">Active</span>
-    </div>
-  </div>
-  <div class="action-card" onclick="alert('Next step: Build full Solidity architecture for URUA milestone payment + NFT minting system')">
-    <div>
-      <div style="font-size:13px;font-weight:600;color:var(--txt)">Build smart contract architecture</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:3px">Generate full Solidity code for URUA milestone payment and NFT minting system</div>
-    </div>
-    <span class="tag tag-blue">Next layer →</span>
-  </div>
-</div>
-
-</div>
-
-<script>
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => { t.style.display='none'; t.classList.remove('active'); });
-  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('tab-' + id);
-  if (el) { el.style.display='flex'; el.classList.add('active'); }
-  btn.classList.add('active');
-}
-</script>
-</body>
-</html>
